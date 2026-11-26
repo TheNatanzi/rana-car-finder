@@ -31,12 +31,13 @@ CITY = {'Alameda': (37.765, -122.242), 'Antioch': (38.005, -121.806), 'Berkeley'
 MODELS = [('corolla cross', 'Corolla Cross', 'SUV'), ('corolla hatchback', 'Corolla Hatchback', 'Hatchback'),
           ('corolla', 'Corolla', 'Sedan'), ('camry', 'Camry', 'Sedan'), ('prius', 'Prius', 'Hatchback'),
           ('rav4', 'RAV4', 'SUV'), ('bz4x', 'bZ4X', 'SUV'), ('b z4x', 'bZ4X', 'SUV'), ('mirai', 'Mirai', 'Sedan'),
-          ('ux', 'UX', 'SUV'), ('crown', 'Crown', 'Sedan')]
+          ('ux', 'UX', 'SUV'), ('crown', 'Crown', 'Sedan'), ('c-hr', 'C-HR', 'SUV'), ('highlander', 'Highlander', 'SUV'),
+          ('es', 'ES', 'Sedan')]
 
 
 def parse_title(t):
     tl = t.lower()
-    m = re.search(r'\b(202[3-6])\b', t)
+    m = re.search(r'\b(202[1-6])\b', t)
     if not m:
         return None
     y = int(m.group(1))
@@ -66,7 +67,9 @@ cars = []
 
 # ---------- CarGurus
 hist = {l.split()[0]: l.split()[1:] for l in open('hist.txt')}
-for x in json.load(open('cg.json')):
+CG = json.load(open('cg21.json'))
+CG += [x for x in json.load(open('cg15b.json')) if x['id'] not in {y['id'] for y in CG} and os.path.exists('det/%s.json' % x['id'])]
+for x in CG:
     model = x['modelName']
     fuel = {'Gasoline': 'Gas', 'Fuel Cell': 'Hydrogen'}.get(x['localizedFuelType'], x['localizedFuelType'])
     if model == 'Camry' and fuel == 'Hybrid':
@@ -96,7 +99,7 @@ for x in json.load(open('cg.json')):
             title = 'frame'
         if vh.get('isFleet') or vh.get('isRentalFleet'):
             extra.append('Former rental or fleet car')
-    cars.append(dict(extra=extra,
+    cars.append(dict(extra=extra, older=(x['carYear'] < 2021 or int(x['mileage']) > 70000),
         src='CarGurus', seller='Dealer' if x['sellerType'] == 'DEALER' else 'Private',
         sellerName=x.get('serviceProviderName') or '', year=x['carYear'], make=x['makeName'], model=model,
         trim=(x.get('trimName') or '').replace(' FWD', ''), body=body, fuel=fuel, price=int(x['price']),
@@ -107,7 +110,7 @@ for x in json.load(open('cg.json')):
         color=x.get('exteriorColorName') or '', phone=x.get('phoneNumberString') or '', note=''))
 
 # ---------- market model fitted on CarGurus market values (log price ~ model + year + miles)
-tr = [c for c in cars if c['market']]
+tr = [c for c in cars if c['market'] and not c.get('older')]
 mods = sorted({c['model'] for c in tr})
 
 
@@ -129,13 +132,17 @@ def est(c):
 
 for c in cars:
     c['marketEst'] = False
-    if not c['market']:
+    if not c['market'] and not c.get('older'):
         c['market'] = est(c)
         c['marketEst'] = True
 vins = {c['vin'] for c in cars if c['vin']}
 
 # ---------- Craigslist
-for x in json.load(open('cl.json')):
+clseen = set()
+for x in json.load(open('cl.json')) + json.load(open('cl21.json')):
+    if (x['title'], x['price']) in clseen:
+        continue
+    clseen.add((x['title'], x['price']))
     if x.get('gone') or not x.get('odometer'):
         continue
     p = parse_title(x['title'])
@@ -204,7 +211,7 @@ for c in cars:
     if c['body'] not in ('Sedan', 'SUV', 'Hatchback'):
         dropc('Not a sedan or SUV')
         continue
-    if c['miles'] is not None and c['miles'] > 70000:
+    if c['miles'] is not None and c['miles'] > 70000 and not c.get('older'):
         dropc('Over 70k miles')
         continue
     if c['dist'] is not None and c['dist'] > 100:
@@ -233,7 +240,7 @@ for c in cars:
         sM = max(0, min(25, (1.6 - ratio) / 1.2 * 25))
     else:
         sM = 8
-    sY = 3 + (c['year'] - 2023) * 4
+    sY = max(0, (c['year'] - 2021) * 3)
     if c['acc'] is None:
         sH = 5
     elif c['acc'] == 0:
@@ -280,17 +287,35 @@ for c in cars:
         flags.append('%d days unsold: room to negotiate' % c['days'])
     c['flags'] = flags
     c['check'] = 'full' if c['acc'] is not None else 'partial' if c['miles'] is not None else 'low'
+    if c.get('older'):
+        c['flags'].insert(0, 'Outside the rules: older or over 70,000 miles')
     out.append(c)
 
+older = [c for c in out if c.get('older') and c['price'] < 15000 and c['year'] >= 2017 and c['miles'] <= 100000]
+out = [c for c in out if not c.get('older')]
+for c in out + older:
+    c.pop('older', None)
+older.sort(key=lambda c: (-c['score'], c['price']))
+for n, c in enumerate(older, 1):
+    c['id'] = 9000 + n
 out.sort(key=lambda c: (-c['score'], c['price']))
 for n, c in enumerate(out, 1):
     c['id'] = n
-meta = dict(checked='2026-11-25', tax=TAX, budget=BUDGET, home='San Mateo, CA',
+meta = dict(checked='2026-11-26', tax=TAX, budget=BUDGET, home='San Mateo, CA',
             counts={s: sum(1 for c in out if c['src'] == s) for s in ('CarGurus', 'Facebook', 'Craigslist')},
             dropped=drop, cheapestLexus=26593)
 os.makedirs(OUT + '/data', exist_ok=True)
-json.dump(dict(meta=meta, cars=out), open(OUT + '/data/cars.json', 'w', encoding='utf-8'), separators=(',', ':'))
+json.dump(dict(meta=meta, cars=out, older=older), open(OUT + '/data/cars.json', 'w', encoding='utf-8'), separators=(',', ':'))
 print(len(out), meta['counts'], drop, 'inBudget', sum(c['inBudget'] for c in out))
 for c in out[:14]:
     print(c['score'], c['parts'], c['src'], c['year'], c['model'], c['trim'][:16], c['price'], c['otd'], c['miles'],
           c['market'], c['acc'], c['own'], c['cpo'], c['city'], c['dist'])
+
+print('--- older under 15k')
+for c in older:
+    print(c['score'], c['parts'], c['year'], c['model'], c['trim'], c['price'], c['otd'], c['miles'], c['acc'], c['own'], c['city'], c['dist'], c['title'], c['flags'])
+for cap in (25000, 20000, 15000):
+    ok = [c for c in out if c['price'] < cap and c['acc'] == 0 and c['fuel'] != 'Electric' and c['miles'] is not None and c['inBudget']]
+    print('--- under', cap, len(ok))
+    for c in ok[:6]:
+        print(c['score'], c['parts'], c['src'], c['year'], c['model'], c['trim'][:16], c['price'], c['otd'], c['miles'], c['own'], c['city'], c['dist'], c['flags'])

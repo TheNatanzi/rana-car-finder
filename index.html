@@ -31,6 +31,7 @@ p{margin:0 0 10px}
 .facts li{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:15px}
 .facts b{font-weight:700}
 
+.tiernote{margin-top:12px}
 .picks{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:14px}
 .pick{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
 .pick img,.pick .noimg{width:100%;aspect-ratio:16/10;object-fit:cover;background:var(--accent-soft);display:block}
@@ -126,7 +127,7 @@ a.view{color:var(--accent);font-weight:700;white-space:nowrap}
 <body>
 <div class="wrap">
   <h1>Rana's Car Finder</h1>
-  <p class="sub">Used Toyota and Lexus cars within 100 miles of San Mateo, model years 2023 to 2026, under 70,000 miles, clean title. Best value is at the top. Tap any column to sort.</p>
+  <p class="sub">Used Toyota and Lexus cars within 100 miles of San Mateo, model years 2021 to 2026, under 70,000 miles, clean title. Best value is at the top. Tap any column to sort.</p>
   <ul class="facts" id="facts"></ul>
 
   <section class="zone">
@@ -138,7 +139,7 @@ a.view{color:var(--accent);font-weight:700;white-space:nowrap}
       <div class="name">Buy the silver 2025 Corolla LE</div>
       <div class="big">Pay $21,999</div>
       <div class="small">That is the price on his own website. About $24,276 total with tax and fees, which is $724 under the $25,000 limit.</div>
-      <div class="small">12,635 miles. 2 miles from home. It is the only one of his three that fits the rules (2023 or newer, under 70,000 miles).</div>
+      <div class="small">12,635 miles. 2 miles from home. It is the only one of his three that fits the rules (2021 or newer, under 70,000 miles).</div>
       <div><span class="tag bad">Do not pay the quoted $22,700: about $25,044 total, $44 over the limit</span></div>
       <div><span class="tag">Ask for the Carfax before paying</span></div>
       <div class="btnrow"><a class="btn" href="https://www.premiumautodealers.com/inventory/toyota/corolla/320080/" target="_blank" rel="noopener">View this car</a><a class="view" href="https://www.premiumautodealers.com/inventory/?keyword=Toyota" target="_blank" rel="noopener">All his Toyotas</a></div>
@@ -148,7 +149,7 @@ a.view{color:var(--accent);font-weight:700;white-space:nowrap}
         <thead><tr><th>Car</th><th class="num">Miles</th><th class="num">He quoted</th><th class="num">His website</th><th class="num">Market value</th><th>Verdict</th><th>Link</th></tr></thead>
         <tbody>
           <tr><td class="car" data-l="Car"><b>2025 Corolla LE, silver</b><span>Fits the rules</span></td><td class="num" data-l="Miles">12,635</td><td class="num" data-l="He quoted">$22,700</td><td class="num" data-l="His website">$21,999</td><td class="num" data-l="Market value">about $22,750</td><td data-l="Verdict"><span class="under">Good at $21,999</span><br><span class="muted">Quote is about market, $701 above his site</span></td><td data-l="Link"><a class="view" href="https://www.premiumautodealers.com/inventory/toyota/corolla/320080/" target="_blank" rel="noopener">View listing</a></td></tr>
-          <tr><td class="car" data-l="Car"><b>2021 Corolla SE, black</b><span>Too old, too many miles</span></td><td class="num" data-l="Miles">114,629</td><td class="num" data-l="He quoted">$17,000</td><td class="num" data-l="His website">$15,999</td><td class="num" data-l="Market value">$16,317</td><td data-l="Verdict"><span class="over">Quote is $683 over market</span><br><span class="muted">Fair only at $15,999</span></td><td data-l="Link"><a class="view" href="https://www.premiumautodealers.com/inventory/toyota/corolla/066904/" target="_blank" rel="noopener">View listing</a></td></tr>
+          <tr><td class="car" data-l="Car"><b>2021 Corolla SE, black</b><span>Too many miles</span></td><td class="num" data-l="Miles">114,629</td><td class="num" data-l="He quoted">$17,000</td><td class="num" data-l="His website">$15,999</td><td class="num" data-l="Market value">$16,317</td><td data-l="Verdict"><span class="over">Quote is $683 over market</span><br><span class="muted">Fair only at $15,999</span></td><td data-l="Link"><a class="view" href="https://www.premiumautodealers.com/inventory/toyota/corolla/066904/" target="_blank" rel="noopener">View listing</a></td></tr>
           <tr><td class="car" data-l="Car"><b>2016 Corolla LE, white</b><span>Too old, too many miles</span></td><td class="num" data-l="Miles">143,958</td><td class="num" data-l="He quoted">$11,500</td><td class="num" data-l="His website">$10,999</td><td class="num" data-l="Market value">$10,638</td><td data-l="Verdict"><span class="over">Quote is $862 over market</span><br><span class="muted">Still $361 over at $10,999</span></td><td data-l="Link"><a class="view" href="https://www.premiumautodealers.com/inventory/toyota/corolla/668510/" target="_blank" rel="noopener">View listing</a></td></tr>
         </tbody>
       </table>
@@ -159,8 +160,18 @@ a.view{color:var(--accent);font-weight:700;white-space:nowrap}
 
   <div class="break"><div class="zlabel">Part 2</div><div class="btitle">Everything else for sale nearby</div><p class="sub">These are from other dealers and private sellers, not the family friend. Use them to compare.</p></div>
 
-  <h2>Top 3 picks today</h2>
-  <div class="picks" id="picks"></div>
+  <h2>Top 3 under $25,000</h2>
+  <p class="sub">Priced $20,000 to $25,000, and the total with tax stays within the $25,000 limit.</p>
+  <div class="picks" id="picks25"></div>
+
+  <h2>Top 3 under $20,000</h2>
+  <p class="sub">Priced $15,000 to $20,000.</p>
+  <div class="picks" id="picks20"></div>
+
+  <h2>Top 3 under $15,000</h2>
+  <p class="sub" id="note15"></p>
+  <div class="picks" id="picks15"></div>
+  <p class="sub tiernote">Every pick above has a history record showing zero accidents and a clean title. Electric cars are left out of the picks.</p>
 
   <h2>All cars</h2>
   <div class="filters" id="filters">
@@ -218,7 +229,7 @@ const $ = s => document.querySelector(s);
 const money = n => n == null ? "?" : "$" + Math.round(n).toLocaleString("en-US");
 const num = n => n == null ? "?" : Math.round(n).toLocaleString("en-US");
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-let CARS = [], META = {}, sortKey = "score", sortDir = -1;
+let CARS = [], OLDER = [], META = {}, sortKey = "score", sortDir = -1;
 
 function histText(c){
   if (c.acc == null) return c.src === "CarGurus" ? "Not checked" : "Ask seller";
@@ -294,16 +305,29 @@ function render(){
       "</tr>";
   }).join("");
 }
-function picks(){
-  const best = CARS.filter(c => c.inBudget && c.acc === 0 && c.fuel !== "Electric" && c.miles != null).slice(0, 3);
-  $("#picks").innerHTML = best.map((c, i) =>
+function pickCards(el, list){
+  $(el).innerHTML = list.length ? list.map((c, i) =>
     '<div class="pick">' + img(c, "ph") +'<div class="body">' +
     '<div class="rank">' + ["Best value", "Runner up", "Third pick"][i] + " · score " + c.score + "</div>" +
     '<div class="name">' + esc(carName(c) + " " + c.trim) + "</div>" +
     '<div class="big">' + money(c.price) + ' <span class="small">about ' + money(c.otd) + " out the door</span></div>" +
     '<div class="small">' + num(c.miles) + " miles · " + esc(histText(c)) + (c.cpo ? " · Toyota certified" : "") + "</div>" +
     '<div class="small">' + (c.below > 0 ? money(c.below) + " under market · " : "") + esc(c.city) + ", " + c.dist + " mi away · " + esc(c.sellerName || c.seller) + "</div>" +
-    '<a class="btn" href="' + esc(c.url) + '" target="_blank" rel="noopener">View this car</a></div></div>').join("");
+    (c.flags || []).filter(f => /rental|owners|Outside/.test(f)).map(f => '<div><span class="tag">' + esc(f.replace("Outside the rules: older or over 70,000 miles", "Older or over 70,000 miles")) + "</span></div>").join("") +
+    '<a class="btn" href="' + esc(c.url) + '" target="_blank" rel="noopener">View this car</a></div></div>').join("")
+    : '<div class="note">Nothing fits here today.</div>';
+}
+function picks(){
+  const ok = c => c.acc === 0 && c.fuel !== "Electric" && c.miles != null;
+  const good = CARS.filter(ok);
+  pickCards("#picks25", good.filter(c => c.price >= 20000 && c.inBudget).slice(0, 3));
+  pickCards("#picks20", good.filter(c => c.price >= 15000 && c.price < 20000).slice(0, 3));
+  let low = good.filter(c => c.price < 15000).slice(0, 3);
+  if (low.length < 3) {
+    low = low.concat(OLDER.filter(c => ok(c) && (c.body === "Sedan" || c.body === "SUV")).slice(0, 3 - low.length));
+    $("#note15").textContent = "No clean-title Toyota or Lexus from 2021 or newer with under 70,000 miles sells for under $15,000 near San Mateo. These are the best older ones (2017 to 2020, up to 100,000 miles).";
+  } else $("#note15").textContent = "Priced under $15,000.";
+  pickCards("#picks15", low);
 }
 function facts(){
   const inB = CARS.filter(c => c.inBudget);
@@ -321,7 +345,7 @@ function facts(){
   const notes = [
     "Listings sell fast. This list was checked on " + items[0][1] + ". Call before you drive.",
     "Total out the door is an estimate: price plus " + (META.tax * 100).toFixed(3) + "% San Mateo sales tax plus about $350 to $450 in DMV and paperwork fees. Dealers may add their own fees.",
-    "No Lexus fits the budget. The cheapest matching Lexus within 100 miles was " + money(META.cheapestLexus) + " before tax.",
+    "No Lexus fits the budget. None from 2021 or newer within 100 miles was priced under $23,500, and the cheapest 2023 or newer one was " + money(META.cheapestLexus) + " before tax.",
     (dr["Salvage or branded title"] || 0) + " salvage or branded-title cars and " + (dr["Frame damage"] || 0) + " frame-damaged cars were removed. They looked like the best deals until the title record was checked.",
     (dr["Hydrogen Mirai"] || 0) + " Toyota Mirai listings were removed. They are very cheap because they run on hydrogen, and hydrogen stations in California keep closing.",
     "Facebook listings do not show an accident report. Ask the seller for the VIN and a Carfax, and ask if the title is clean and in their name.",
@@ -331,7 +355,7 @@ function facts(){
   $("#notes").innerHTML = notes.map(n => "<li>" + esc(n) + "</li>").join("");
 }
 fetch("data/cars.json").then(r => r.json()).then(d => {
-  CARS = d.cars; META = d.meta;
+  CARS = d.cars; META = d.meta; OLDER = d.older || [];
   [...new Set(CARS.map(c => c.model))].sort().forEach(m => $("#f-model").insertAdjacentHTML("beforeend", "<option>" + esc(m) + "</option>"));
   facts(); picks(); render();
 }).catch(() => { $("#rows").innerHTML = '<tr><td colspan="11" class="empty">The car list did not load. Refresh the page.</td></tr>'; });
