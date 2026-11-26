@@ -87,7 +87,9 @@ a.view{color:var(--accent);font-weight:700;white-space:nowrap}
 .recipe div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:15px}
 .recipe b{display:block;font-size:22px;color:var(--accent)}
 .empty{padding:30px;text-align:center;color:var(--muted)}
-.friend{display:grid;grid-template-columns:minmax(280px,360px) 1fr;gap:14px;align-items:start}
+.friend{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;align-items:start}
+.friend>*{min-width:0}
+.verdict .btn{align-self:flex-start;margin-top:4px}
 .verdict{background:var(--card);border:2px solid var(--accent);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:8px}
 .verdict .rank{font-size:14px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.05em}
 .verdict .name{font-size:21px;font-weight:700;line-height:1.2}
@@ -96,8 +98,7 @@ a.view{color:var(--accent);font-weight:700;white-space:nowrap}
 .verdict .tag{white-space:normal}
 .ftable table{min-width:640px}
 .ftable th{cursor:default}
-@media (max-width:900px){.friend{grid-template-columns:1fr}}
-@media (max-width:760px){.ftable tbody tr{grid-template-columns:1fr}.ftable td{grid-column:1 / -1;display:flex;justify-content:space-between;gap:12px;text-align:right;border-top:1px solid var(--line);padding-top:6px}.ftable td.car{display:block;text-align:left;border-top:0}.ftable td br{display:none}}
+@media (max-width:760px){.ftable table{min-width:0}.ftable tbody tr{grid-template-columns:1fr}.ftable td{grid-column:1 / -1;display:flex;justify-content:space-between;gap:12px;text-align:right;border-top:1px solid var(--line);padding-top:6px}.ftable td.car{display:block;text-align:left;border-top:0}.ftable td br{display:none}}
 
 @media (max-width:760px){
   h1{font-size:25px}
