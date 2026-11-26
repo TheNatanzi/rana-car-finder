@@ -268,6 +268,8 @@ for c in cars:
         flags.append('%d owners' % c['own'])
     if c['src'] == 'Facebook' and c['miles'] is None:
         flags.append('Miles not shown: ask seller')
+    if c['src'] == 'Facebook' and c['title'] == 'clean':
+        flags.append('Clean title per seller: get a Carfax')
     if c['src'] == 'Facebook' and c['title'] == '?':
         flags.append('Title not confirmed: ask seller')
     if c['deal'] in ('OVERPRICED', 'POOR_PRICE'):
