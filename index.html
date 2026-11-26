@@ -87,6 +87,17 @@ a.view{color:var(--accent);font-weight:700;white-space:nowrap}
 .recipe div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:15px}
 .recipe b{display:block;font-size:22px;color:var(--accent)}
 .empty{padding:30px;text-align:center;color:var(--muted)}
+.friend{display:grid;grid-template-columns:minmax(280px,360px) 1fr;gap:14px;align-items:start}
+.verdict{background:var(--card);border:2px solid var(--accent);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.verdict .rank{font-size:14px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.05em}
+.verdict .name{font-size:21px;font-weight:700;line-height:1.2}
+.verdict .big{font-size:30px;font-weight:700;color:var(--good)}
+.verdict .small{font-size:15px;color:var(--muted)}
+.verdict .tag{white-space:normal}
+.ftable table{min-width:640px}
+.ftable th{cursor:default}
+@media (max-width:900px){.friend{grid-template-columns:1fr}}
+@media (max-width:760px){.ftable tbody tr{grid-template-columns:1fr}.ftable td{grid-column:1 / -1;display:flex;justify-content:space-between;gap:12px;text-align:right;border-top:1px solid var(--line);padding-top:6px}.ftable td.car{display:block;text-align:left;border-top:0}.ftable td br{display:none}}
 
 @media (max-width:760px){
   h1{font-size:25px}
@@ -109,6 +120,30 @@ a.view{color:var(--accent);font-weight:700;white-space:nowrap}
   <h1>Rana's Car Finder</h1>
   <p class="sub">Used Toyota and Lexus cars within 100 miles of San Mateo, model years 2023 to 2026, under 70,000 miles, clean title. Best value is at the top. Tap any column to sort.</p>
   <ul class="facts" id="facts"></ul>
+
+  <h2>Buying through the family friend (Premium Auto, San Mateo)</h2>
+  <div class="friend">
+    <div class="verdict">
+      <div class="rank">Our answer</div>
+      <div class="name">Buy the silver 2025 Corolla LE</div>
+      <div class="big">Pay $21,999</div>
+      <div class="small">That is the price on his own website. About $24,276 total with tax and fees, which is $724 under the $25,000 limit.</div>
+      <div class="small">12,635 miles. 2 miles from home. It is the only one of his three that fits the rules (2023 or newer, under 70,000 miles).</div>
+      <div><span class="tag bad">Do not pay the quoted $22,700: about $25,044 total, $44 over the limit</span></div>
+      <div><span class="tag">Ask for the Carfax before paying</span></div>
+      <a class="btn" href="https://www.premiumautodealers.com/inventory/?keyword=Toyota" target="_blank" rel="noopener">See his cars</a>
+    </div>
+    <div class="tablebox ftable">
+      <table>
+        <thead><tr><th>Car</th><th class="num">Miles</th><th class="num">He quoted</th><th class="num">His website</th><th class="num">Market value</th><th>Verdict</th></tr></thead>
+        <tbody>
+          <tr><td class="car" data-l="Car"><b>2025 Corolla LE, silver</b><span>Fits the rules</span></td><td class="num" data-l="Miles">12,635</td><td class="num" data-l="He quoted">$22,700</td><td class="num" data-l="His website">$21,999</td><td class="num" data-l="Market value">about $22,750</td><td data-l="Verdict"><span class="under">Good at $21,999</span><br><span class="muted">Quote is about market, $701 above his site</span></td></tr>
+          <tr><td class="car" data-l="Car"><b>2021 Corolla SE, black</b><span>Too old, too many miles</span></td><td class="num" data-l="Miles">114,629</td><td class="num" data-l="He quoted">$17,000</td><td class="num" data-l="His website">$15,999</td><td class="num" data-l="Market value">$16,317</td><td data-l="Verdict"><span class="over">Quote is $683 over market</span><br><span class="muted">Fair only at $15,999</span></td></tr>
+          <tr><td class="car" data-l="Car"><b>2016 Corolla LE, white</b><span>Too old, too many miles</span></td><td class="num" data-l="Miles">143,958</td><td class="num" data-l="He quoted">$11,500</td><td class="num" data-l="His website">$10,999</td><td class="num" data-l="Market value">$10,638</td><td data-l="Verdict"><span class="over">Quote is $862 over market</span><br><span class="muted">Still $361 over at $10,999</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 
   <h2>Top 3 picks today</h2>
   <div class="picks" id="picks"></div>
